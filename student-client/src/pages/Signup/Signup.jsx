@@ -1,45 +1,51 @@
 import React, { useState } from "react";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import auth from "../../firebase.init";
 import { AiFillEye } from "react-icons/ai";
 
 const Signup = () => {
-   
 
-    const [error, setError] = useState(false)
-    const {
-      register,
-      formState: { errors },
-      handleSubmit,
-    } = useForm();
-  
-    const onSubmit = async (data) => {
-      console.log(data);
-      setError(false);
-    try{
-      const res = await axios.post("/auth/register", {
-        username: data.username,
-        firstname: data.firstname,
-        lastname: data.lastname,
-        email: data.email,
-        password: data.password,
-        
-       });
-       res.data && window.location.replace("/login")
-    }catch(err){
-     setError(true);
-    }
-    
-      
-     
-    };
-   // show Password start===================
-    const [passwordShown, setPasswordShown] = useState(false);
-   
-    const togglePassword = () => {
-      setPasswordShown(!passwordShown);
-    };
+  // show Password start===================
+  const [passwordShown, setPasswordShown] = useState(false);
+
+
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+
+  const [createUserWithEmailAndPassword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(auth);
+
+  const onSubmit = async (data) => {
+    console.log(data);
+    await createUserWithEmailAndPassword(data.email, data.password);
+  };
+
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (user) {
+    return (
+        window.location.replace("/login")
+    );
+  }
+
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
+  };
 
   return (
     <div className=" flex justify-center items-center ">
@@ -62,6 +68,7 @@ const Signup = () => {
                     message: "username is required",
                   },
                 })}
+             
               />
               <p className="text-red-500 text-xs">{errors.username?.message}</p>
               <div className="grid grid-cols-2 gap-5">
@@ -77,6 +84,7 @@ const Signup = () => {
                         message: "First Name is required",
                       },
                     })}
+                   
                   />
                   <p className="text-red-500 text-xs">
                     {errors.firstname?.message}
@@ -94,6 +102,7 @@ const Signup = () => {
                         message: "Last Name is required",
                       },
                     })}
+                 
                   />
                   <p className="text-red-500 text-xs">
                     {errors.lastname?.message}
@@ -116,6 +125,7 @@ const Signup = () => {
                     message: "Provide valid Email",
                   },
                 })}
+             
               />
               <p className="text-red-500 text-xs">{errors.email?.message}</p>
 
@@ -142,30 +152,36 @@ const Signup = () => {
                       message: "Must be at least 6 characters long",
                     },
                   })}
+              
                 />
-                 {passwordShown ? <AiFillEye
-                  onClick={togglePassword}
-                  className="absolute right-3 top-4 text-xl text-primary"
-                />: <AiFillEye
-                onClick={togglePassword}
-                className="absolute right-3 top-4 text-xl hover:text-primary"
-              />}
+                {passwordShown ? (
+                  <AiFillEye
+                    onClick={togglePassword}
+                    className="absolute right-3 top-4 text-xl text-primary"
+                  />
+                ) : (
+                  <AiFillEye
+                    onClick={togglePassword}
+                    className="absolute right-3 top-4 text-xl hover:text-primary"
+                  />
+                )}
               </div>
               <p className="text-red-500 text-xs">{errors.password?.message}</p>
 
-             
               <input
                 type="submit"
-                value={("Create Account")}
+                value={"Create Account"}
                 className="bg-primary transition duration-150 ease-in-out hover:scale-[0.97] text-white py-3 rounded"
               />
-              
             </form>
-            {error && <p className="text-red-500 text-sm text-center">User already exist</p>}
-
+            {error && (
+              <p className="text-red-500 text-sm text-center">
+                User already exist
+              </p>
+            )}
 
             <p className="text-center py-5 text-slate-700">
-             Already Have an Account?
+              Already Have an Account?
               <Link to="/login">
                 <span className="text-secondary"> Login</span>
               </Link>

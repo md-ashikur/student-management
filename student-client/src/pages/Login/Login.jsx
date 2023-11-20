@@ -2,19 +2,27 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import auth from "../../firebase.init";
+
 
 const Login = () => {
-  const [error, setError] = useState(false);
+
+  //passwordShown ==========================
+  const [passwordShown, setPasswordShown] = useState(false);
 
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
+  const [
+    signInWithEmailAndPassword,
+    user,
+    loading,
+    error,
+  ] = useSignInWithEmailAndPassword(auth);
 
-  //passwordShown ==========================
-  const [passwordShown, setPasswordShown] = useState(false);
 
   const togglePassword = () => {
     setPasswordShown(!passwordShown);
@@ -22,16 +30,26 @@ const Login = () => {
 
   // form onSubmit=======================
   const onSubmit = async (data) => {
-    setError(false);
-    try {
-      const res = await axios.post("/auth/login", {
-        username: data.username,
-        password: data.password,
-      });
-    } catch (err) {
-      setError(true);
-    }
+    await  signInWithEmailAndPassword(data.email, data.password);
   };
+
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (user) {
+    return (
+        window.location.replace("/")
+    );
+  }
+
 
   return (
     <div className=" flex justify-center items-center ">

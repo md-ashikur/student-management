@@ -5,6 +5,7 @@ import AdmissionBody from "./pages/Students/Admission/AdmissionBody";
 import AllStudentsBody from "./pages/Students/AllStudents/AllStudentsBody";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
+import RequireAuth from "./component/RequireAuth/RequireAuth";
 function App() {
 
   const location = useLocation();
@@ -22,8 +23,8 @@ function App() {
       <Routes>
         
 
-        <Route path="/" element={<AllStudentsBody/>}/>
-        <Route path="/admission-form" element={<AdmissionBody/>}/>
+        <Route path="/" element={<RequireAuth><AllStudentsBody/></RequireAuth>}/>
+        <Route path="/admission-form" element={<RequireAuth><AdmissionBody/></RequireAuth>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
         

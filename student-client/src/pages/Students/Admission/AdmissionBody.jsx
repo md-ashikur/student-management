@@ -49,10 +49,10 @@ const AdmissionBody = () => {
             <NavLink to="/" active="text-blue-500" className="flex items-center mb-2">
               <span className={!isSidebarOpen ? 'hidden' : 'mr-2'}>All Students</span>
             </NavLink>
-            <NavLink to="admission-form" activeClassName="text-blue-500" className="flex items-center mb-2">
+            <NavLink to="/admission-form" activeClassName="text-blue-500" className="flex items-center mb-2">
               <span className={!isSidebarOpen ? 'hidden' : 'mr-2'}>Admission Form</span>
             </NavLink>
-            <NavLink to="student-details" activeClassName="text-blue-500" className="flex items-center mb-2">
+            <NavLink to="/student-details" activeClassName="text-blue-500" className="flex items-center mb-2">
               <span className={!isSidebarOpen ? 'hidden' : 'mr-2'}>Student Details</span>
             </NavLink>
 
