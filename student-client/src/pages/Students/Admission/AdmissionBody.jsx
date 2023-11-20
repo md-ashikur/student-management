@@ -58,7 +58,7 @@ const AdmissionBody = () => {
 
 
             {/* login signup================= */}
-            <NavLink to="login" activeClassName="text-blue-500" className="flex items-center mb-2">
+            <NavLink to="/login" activeClassName="text-blue-500" className="flex items-center mb-2">
               <span className={!isSidebarOpen ? 'hidden' : 'mr-2'}>Logout</span>
             </NavLink>
           </div>

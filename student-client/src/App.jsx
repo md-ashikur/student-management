@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import './App.css';
 import AdmissionBody from "./pages/Students/Admission/AdmissionBody";
 import AllStudentsBody from "./pages/Students/AllStudents/AllStudentsBody";
+import Login from "./pages/Login/Login";
+import Signup from "./pages/Signup/Signup";
 function App() {
 
   const location = useLocation();
@@ -22,6 +24,8 @@ function App() {
 
         <Route path="/" element={<AllStudentsBody/>}/>
         <Route path="/admission-form" element={<AdmissionBody/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/signup" element={<Signup/>}/>
         
       
       </Routes>
