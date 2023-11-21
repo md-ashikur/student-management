@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Transition } from '@headlessui/react';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
-
+import { useSignOut } from 'react-firebase-hooks/auth';
 import AdmissionForm from '../../../partials/students/AdmissionForm';
+import auth from "../../../firebase.init";
 
 const AdmissionBody = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [signOut] = useSignOut(auth);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -58,7 +60,12 @@ const AdmissionBody = () => {
 
 
             {/* login signup================= */}
-            <NavLink to="/login" activeClassName="text-blue-500" className="flex items-center mb-2">
+            <NavLink to="/login" onClick={async () => {
+          const success = await signOut();
+          if (success) {
+            alert('You are sign out');
+          }
+        }} activeClassName="text-blue-500" className="flex items-center mb-2">
               <span className={!isSidebarOpen ? 'hidden' : 'mr-2'}>Logout</span>
             </NavLink>
           </div>

@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { Transition } from '@headlessui/react';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
-
+import auth from "../../../firebase.init";
+import { useSignOut } from 'react-firebase-hooks/auth';
+import AllStudent from '../../../partials/students/AllStudent';
 
 const AllStudentsBody = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [signOut] = useSignOut(auth);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -48,16 +51,21 @@ const AllStudentsBody = () => {
             <NavLink to="/" active="text-blue-500" className="flex items-center mb-2">
               <span className={!isSidebarOpen ? 'hidden' : 'mr-2'}>All Students</span>
             </NavLink>
-            <NavLink to="admission-form" activeClassName="text-blue-500" className="flex items-center mb-2">
+            <NavLink to="/admission-form" activeClassName="text-blue-500" className="flex items-center mb-2">
               <span className={!isSidebarOpen ? 'hidden' : 'mr-2'}>Admission Form</span>
             </NavLink>
-            <NavLink to="student-details" activeClassName="text-blue-500" className="flex items-center mb-2">
+            <NavLink to="/student-details" activeClassName="text-blue-500" className="flex items-center mb-2">
               <span className={!isSidebarOpen ? 'hidden' : 'mr-2'}>Student Details</span>
             </NavLink>
 
 
             {/* login signup================= */}
-            <NavLink to="login" activeClassName="text-blue-500" className="flex items-center mb-2">
+            <NavLink to="login" onClick={async () => {
+          const success = await signOut();
+          if (success) {
+            alert('You are sign out');
+          }
+        }} activeClassName="text-blue-500" className="flex items-center mb-2">
               <span className={!isSidebarOpen ? 'hidden' : 'mr-2'}>Logout</span>
             </NavLink>
           </div>
@@ -67,7 +75,7 @@ const AllStudentsBody = () => {
       {/* Main Content */}
       <div className="flex-1 w-full">
         <div className="">
-           dfgdfgderrrrrrrrrrrrrrrrrrrrrrrrrrrrrg
+          <AllStudent/>
         </div>
       </div>
     </div>

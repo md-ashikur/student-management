@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 import "./AdmissionForm.css";
+import { useForm } from "react-hook-form";
+import  axios  from 'axios';
 
 const AdmissionForm = () => {
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset
+  } = useForm();
+
   const [imageSrc, setImageSrc] = useState(null);
 
   const pictureImageTxt = "Choose an image";
@@ -20,6 +30,21 @@ const AdmissionForm = () => {
     } else {
       setImageSrc(null);
     }
+
+    console.log(file.name);
+  };
+
+  // submit===============
+  const onSubmit = async (data) => {
+
+    axios.post('/add_students', data)
+    .then((res)=>{
+      console.log(res);
+    })
+    .catch((err) => console.log(err));
+
+    reset();
+    console.log(data);
   };
 
   return (
@@ -31,27 +56,60 @@ const AdmissionForm = () => {
       </div>
 
       <section className="lg:mx-20 mx-5 my-20 bg-base-100  drop-shadow-lg lg:p-16 p-8 rounded-lg">
-        <form action="">
-          {/* member Information start-------------- */}
-          <div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* Student Information start---
+          ----------- */}
+          <div className="my-5">
             <h2 className=" text-xl font-bold text-primary-light">
               Student Information
             </h2>
 
             <div className="flex gap-5">
-              <div className="input-field my-8">
-                <input type="text" id="firstName" required />
-                <label htmlFor="firstName">First Name</label>
+              {/* ============First Name input============ */}
+
+              <div className="input-field mt-8">
+                <input
+                  id="firstName"
+                  className="border-b-2 slate-700 outline-0 "
+                  {...register("firstname", {
+                    maxLength: 30,
+                    required: {
+                      value: true,
+                      message: "First Name is required",
+                    },
+                  })}
+                />
+                <label htmlFor="firstName" className="labelstyle">First Name</label>
+                <p className="text-red-500 text-xs">
+                  {errors.firstname?.message}
+                </p>
               </div>
 
-              <div className="input-field my-8">
-                <input type="text" id="lastName" required />
-                <label htmlFor="lastName">Last Name</label>
+              {/* ============Last Name input============ */}
+
+              <div className="input-field mt-8">
+                <input
+                  id="lastName"
+                  className="border-b-2 slate-700 outline-0 "
+                  {...register("lastname", {
+                    maxLength: 30,
+                    required: {
+                      value: true,
+                      message: "Last Name is required",
+                    },
+                  })}
+                />
+                <label htmlFor="lastName" className="labelstyle">Last Name</label>
+                <p className="text-red-500 text-xs">
+                  {errors.lastname?.message}
+                </p>
               </div>
+
+              {/* ============image input============ */}
 
               <div className="relative">
                 <label
-                  className="picture"
+                  className="picture labelstyle"
                   htmlFor="picture__input"
                   tabIndex="0"
                 >
@@ -70,27 +128,51 @@ const AdmissionForm = () => {
 
                 <input
                   type="file"
-                  name="picture__input"
                   id="picture__input"
-                  style={{ display: "none" }}
+                  className="border-b-2 slate-700 outline-0 "
+                  {...register("image")}
                   onChange={handleFileChange}
                 />
               </div>
             </div>
 
             <div className="flex gap-5">
-              <div className="my-8">
+              {/* ============Date of Birth input============ */}
+
+              <div className="input-field mt-8">
                 <p>Date of Birth</p>
-                <div className="input-field ">
-                  <input type="date" id="date" required />
-                </div>
+                <input
+                  type="date"
+                  id="date"
+                  className=" outline-0 "
+                  {...register("date", {
+                    required: {
+                      value: true,
+                      message: "Date is required",
+                    },
+                  })}
+                />
+                <label htmlFor="date"></label>
+                <p className="text-red-500 text-xs">{errors.date?.message}</p>
               </div>
 
-              <div className="relative mt-8">
-                <p>Gender</p>
+              {/* ===========Gender input============ */}
 
+              <div className="input-field mt-8">
+                <p>Gender</p>
                 <div className="flex mt-4">
-                  <input type="radio" id="male" name="gender" value="male" />
+                  <input
+                    type="radio"
+                    id="male"
+                    value="male"
+                    className=" outline-0 "
+                    {...register("gender", {
+                      required: {
+                        value: true,
+                        message: "Gender is required",
+                      },
+                    })}
+                  />
                   <label
                     htmlFor="male"
                     className="relative !text-primary-light !top-0 px-3"
@@ -101,8 +183,13 @@ const AdmissionForm = () => {
                   <input
                     type="radio"
                     id="female"
-                    name="gender"
                     value="female"
+                    {...register("gender", {
+                      required: {
+                        value: true,
+                        message: "Gender is required",
+                      },
+                    })}
                   />
                   <label
                     htmlFor="female"
@@ -114,8 +201,8 @@ const AdmissionForm = () => {
                   <input
                     type="radio"
                     id="others"
-                    name="gender"
                     value="others"
+                    {...register("gender", {})}
                   />
                   <label
                     htmlFor="others"
@@ -124,38 +211,142 @@ const AdmissionForm = () => {
                     Others
                   </label>
                 </div>
+
+                <p className="text-red-500 text-xs">{errors.gender?.message}</p>
               </div>
+              {/* ===========Gender input end============ */}
             </div>
+
+            <div className="flex gap-5 mt-20">
+              {/* ============Roll input============ */}
+
+              <div className="input-field mt-8">
+                <input
+                  id="roll"
+                  className="border-b-2 slate-700 outline-0 "
+                  {...register("roll", {
+                    required: {
+                      value: true,
+                      message: "Roll is required",
+                    },
+                  })}
+                />
+                <label htmlFor="roll" className="labelstyle">Roll*</label>
+                <p className="text-red-500 text-xs">
+                  {errors.roll?.message}
+                </p>
+              </div>
+
+              {/* ============Blood Group input============ */}
+
+              <div className="input-field mt-8">
+                <input
+                  id="bloodgroup"
+                  className="border-b-2 slate-700 outline-0 "
+                  {...register("bloodgroup")}
+                />
+                <label htmlFor="bloodgroup" className="labelstyle">Blood Group</label>
+              </div>
+
+              {/* ============Religion input============ */}
+
+              <div className="input-field mt-8">
+                <input
+                  id="religion"
+                  className="border-b-2 slate-700 outline-0 "
+                  {...register("religion")}
+                />
+                <label htmlFor="religion" className="labelstyle">Religion</label>
+              </div>
+
+            </div>
+
+
+            <div className="flex gap-5 mt-20">
+              {/* ============ID input============ */}
+
+              <div className="input-field mt-8">
+                <input
+                  id="id"
+                  className="border-b-2 slate-700 outline-0 "
+                  {...register("id", {
+                    required: {
+                      value: true,
+                      message: "ID is required",
+                    },
+                  })}
+                />
+                <label htmlFor="id" className="labelstyle">ID*</label>
+                <p className="text-red-500 text-xs">
+                  {errors.id?.message}
+                </p>
+              </div>
+
+              {/* ============Batch input============ */}
+
+              <div className="input-field mt-8">
+                <input
+                  id="batch"
+                  className="border-b-2 slate-700 outline-0 "
+                  {...register("batch", {
+                    required: {
+                      value: true,
+                      message: "Batch name is required",
+                    },
+                  })}
+                />
+                <label htmlFor="batch" className="labelstyle">Batch*</label>
+                <p className="text-red-500 text-xs">
+                  {errors.batch?.message}
+                </p>
+              </div>
+
+              {/* ===========dept input============ */}
+
+              <div className="input-field mt-8">
+                <input
+                  id="department"
+                  className="border-b-2 slate-700 outline-0 "
+                  {...register("department")}
+                />
+                <label htmlFor="department" className="labelstyle">Department</label>
+              </div>
+
+            </div>
+
+
           </div>
-          {/* member Information end-------------- */}
+          {/* student Information end---
+          ----------- */}
 
           {/* Address start-------------- */}
-          <div className="my-6">
+          <div className="my-20">
             <h2 className=" text-xl font-bold text-primary-light">Address</h2>
 
             <div className="relative w-full h-[44px] leading-10 my-8">
-              <input type="text" id="address" required />
-              <label htmlFor="address">Street Address</label>
+              <input type="text" id="address" {...register("address")} />
+              <label htmlFor="address" className="labelstyle">Street Address</label>
             </div>
 
             <div className="flex flex-col lg:flex-row gap-10">
               <div className="input-field my-8">
-                <input type="text" id="city" required />
-                <label htmlFor="city">City</label>
+                <input type="text" id="city"  {...register("city")} />
+                <label htmlFor="city" className="labelstyle">City</label>
               </div>
 
               <div className="input-field my-8">
-                <input type="text" id="state" required />
-                <label htmlFor="state">State</label>
+                <input type="text" id="state"  {...register("state")} />
+                <label htmlFor="state" className="labelstyle">State</label>
               </div>
 
               <div className="input-field my-8">
-                <input type="text" id="zipcode" required />
-                <label htmlFor="zipcode">Zip Code</label>
+                <input type="text" id="zipcode"  {...register("postcode")} />
+                <label htmlFor="zipcode" className="labelstyle">Zip/Postal Code</label>
               </div>
 
               <div className=" my-8">
                 <select
+                 {...register("country")}
                   className="h-[44px] w-72 leading-10 border-2 outline-0"
                   id="country"
                   name="country"
@@ -501,13 +692,19 @@ const AdmissionForm = () => {
 
             <div className="flex gap-5">
               <div className="input-field my-8">
-                <input type="email" id="email" required />
-                <label htmlFor="email">E-mail</label>
+                <input type="email" id="email" {...register("email", {
+                  pattern: {
+                    value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
+                    message: "Provide valid Email",
+                  },
+                })} />
+                <label htmlFor="email" className="labelstyle">E-mail</label>
+                <p className="text-red-500 text-xs">{errors.email?.message}</p>
               </div>
 
               <div className="input-field my-8">
-                <input type="tel" id="number" required />
-                <label htmlFor="number">Mobile Number</label>
+                <input type="tel" id="number" {...register("phone")} />
+                <label htmlFor="number" className="labelstyle">Mobile Number</label>
               </div>
             </div>
           </div>
@@ -516,18 +713,17 @@ const AdmissionForm = () => {
 
           {/* terms================ */}
 
-          <div className="relative flex justify-center">
-          <input
+          <div className="relative flex  ">
+            <input
               type="checkbox"
               id="terms"
               name="terms"
               value="terms"
-              className="w-20"
+              className="w-5 h-5"
             />
-            <label htmlFor="terms" className="!text-primary-light">
-              By registering as a member, you agree to our terms and conditions
+            <label htmlFor="terms" className="pl-2 !text-primary-light">
+              By registering you agree to our terms and conditions
             </label>
-           
           </div>
 
           {/* recaptcha--------- */}
@@ -538,12 +734,12 @@ const AdmissionForm = () => {
 
           <input
             type="submit"
-            className="rounded-lg text-white my-5 outline-0 px-5 py-2 bg-secondary w-28 border-0"
+            className="rounded-lg transition duration-150 ease-in-out hover:scale-[0.97] text-white my-5 outline-0 px-5 py-2 bg-secondary w-28 border-0"
             value="Submit"
           />
         </form>
       </section>
-    <div>.</div>
+      <div>.</div>
     </div>
   );
 };
