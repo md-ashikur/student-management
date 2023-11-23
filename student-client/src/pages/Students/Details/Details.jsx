@@ -4,6 +4,7 @@ import { FiMenu, FiX } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 import auth from "../../../firebase.init";
 import { useSignOut } from 'react-firebase-hooks/auth';
+import DetailsBody from '../../../partials/students/DetailsBody';
 
 
 const Details = () => {
@@ -60,7 +61,7 @@ const Details = () => {
   
   
               {/* login signup================= */}
-              <NavLink to="login" onClick={async () => {
+              <NavLink to="/login" onClick={async () => {
             const success = await signOut();
             if (success) {
               alert('You are sign out');
@@ -75,7 +76,7 @@ const Details = () => {
         {/* Main Content */}
         <div className="flex-1 w-full">
           <div className="">
-             ddddddddddddddddddddd
+            <DetailsBody/>
           </div>
         </div>
       </div>

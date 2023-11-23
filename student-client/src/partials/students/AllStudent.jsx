@@ -2,40 +2,18 @@ import React, { useEffect, useState } from 'react';
 import  axios  from 'axios';
 
 
-// const data = [
-//   {
-//     firstname: 'John',
-//     lastname: 'Doe',
-//     birthdate: '2000-05-15',
-//     gender: 'Male',
-//     image: 'john_doe.jpg',
-//     roll: 101,
-//     bloodgroup: 'O+',
-//     religion: 'Christian',
-//     student_id: 'ABCD123',
-//     batch: '2023',
-//     dept: 'Computer Science',
-//     address: '123 Main St',
-//     city: 'New York',
-//     state: 'NY',
-//     postcode: '10001',
-//     country: 'USA',
-//     email: 'john@example.com',
-//     phone: '123-456-7890',
-//   },
-  
-// ];
-
 const AllStudent = () => {
 
     const [data, setData]= useState([]);
-    useEffect(() =>{
-        axios.get('/all-Students')
-        .then((res)=>{
-            setData(res.data)
-        })
-        .catch((err)=> console.log(err));
-    }, []);
+    useEffect(() => {
+        axios.get('/all-students')
+          .then((res) => {
+            setData(res.data);
+          })
+          .catch((err) => {
+            console.error("Error fetching data:", err);
+          });
+      }, []);
 
 
   const [searchTerm, setSearchTerm] = useState('');

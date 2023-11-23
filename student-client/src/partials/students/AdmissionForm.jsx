@@ -37,14 +37,16 @@ const AdmissionForm = () => {
   // submit===============
   const onSubmit = async (data) => {
 
-    axios.post('/add_students', data)
-    .then((res)=>{
-      console.log(res);
-    })
-    .catch((err) => console.log(err));
-
+    try {
+      // Send form data to the backend
+      const response = await axios.post('/add-student', data);
+      console.log('Response from server:', response.data);
+      // Handle success or redirect as needed
+    } catch (error) {
+      console.error('Error adding student:', error);
+      // Handle error, show message, etc.
+    }
     reset();
-    console.log(data);
   };
 
   return (
@@ -70,6 +72,7 @@ const AdmissionForm = () => {
               <div className="input-field mt-8">
                 <input
                   id="firstName"
+                  name="firstname"
                   className="border-b-2 slate-700 outline-0 "
                   {...register("firstname", {
                     maxLength: 30,
@@ -90,6 +93,7 @@ const AdmissionForm = () => {
               <div className="input-field mt-8">
                 <input
                   id="lastName"
+                  name="lastname"
                   className="border-b-2 slate-700 outline-0 "
                   {...register("lastname", {
                     maxLength: 30,
@@ -128,6 +132,7 @@ const AdmissionForm = () => {
 
                 <input
                   type="file"
+                  name="image"
                   id="picture__input"
                   className="border-b-2 slate-700 outline-0 "
                   {...register("image")}
@@ -144,6 +149,7 @@ const AdmissionForm = () => {
                 <input
                   type="date"
                   id="date"
+                  name="date"
                   className=" outline-0 "
                   {...register("date", {
                     required: {
@@ -165,6 +171,7 @@ const AdmissionForm = () => {
                     type="radio"
                     id="male"
                     value="male"
+                    name="gender"
                     className=" outline-0 "
                     {...register("gender", {
                       required: {
@@ -223,6 +230,7 @@ const AdmissionForm = () => {
               <div className="input-field mt-8">
                 <input
                   id="roll"
+                  name="roll"
                   className="border-b-2 slate-700 outline-0 "
                   {...register("roll", {
                     required: {
@@ -242,6 +250,7 @@ const AdmissionForm = () => {
               <div className="input-field mt-8">
                 <input
                   id="bloodgroup"
+                  name="bloodgroup"
                   className="border-b-2 slate-700 outline-0 "
                   {...register("bloodgroup")}
                 />
@@ -253,6 +262,7 @@ const AdmissionForm = () => {
               <div className="input-field mt-8">
                 <input
                   id="religion"
+                  name="religion"
                   className="border-b-2 slate-700 outline-0 "
                   {...register("religion")}
                 />
@@ -268,6 +278,7 @@ const AdmissionForm = () => {
               <div className="input-field mt-8">
                 <input
                   id="id"
+                  name="id"
                   className="border-b-2 slate-700 outline-0 "
                   {...register("id", {
                     required: {
@@ -287,6 +298,7 @@ const AdmissionForm = () => {
               <div className="input-field mt-8">
                 <input
                   id="batch"
+                  name="batch"
                   className="border-b-2 slate-700 outline-0 "
                   {...register("batch", {
                     required: {
@@ -305,11 +317,12 @@ const AdmissionForm = () => {
 
               <div className="input-field mt-8">
                 <input
-                  id="department"
+                  id="dept"
+                  name="dept"
                   className="border-b-2 slate-700 outline-0 "
-                  {...register("department")}
+                  {...register("dept")}
                 />
-                <label htmlFor="department" className="labelstyle">Department</label>
+                <label htmlFor="dept" className="labelstyle">Department</label>
               </div>
 
             </div>
@@ -324,28 +337,29 @@ const AdmissionForm = () => {
             <h2 className=" text-xl font-bold text-primary-light">Address</h2>
 
             <div className="relative w-full h-[44px] leading-10 my-8">
-              <input type="text" id="address" {...register("address")} />
+              <input type="text" name="address" id="address" {...register("address")} />
               <label htmlFor="address" className="labelstyle">Street Address</label>
             </div>
 
             <div className="flex flex-col lg:flex-row gap-10">
               <div className="input-field my-8">
-                <input type="text" id="city"  {...register("city")} />
+                <input type="text" id="city" name="city"  {...register("city")} />
                 <label htmlFor="city" className="labelstyle">City</label>
               </div>
 
               <div className="input-field my-8">
-                <input type="text" id="state"  {...register("state")} />
+                <input type="text" id="state"  name="state" {...register("state")} />
                 <label htmlFor="state" className="labelstyle">State</label>
               </div>
 
               <div className="input-field my-8">
-                <input type="text" id="zipcode"  {...register("postcode")} />
+                <input type="text" id="zipcode" name="postcode"  {...register("postcode")} />
                 <label htmlFor="zipcode" className="labelstyle">Zip/Postal Code</label>
               </div>
 
               <div className=" my-8">
                 <select
+                name="country"
                  {...register("country")}
                   className="h-[44px] w-72 leading-10 border-2 outline-0"
                   id="country"
@@ -692,7 +706,7 @@ const AdmissionForm = () => {
 
             <div className="flex gap-5">
               <div className="input-field my-8">
-                <input type="email" id="email" {...register("email", {
+                <input type="email" id="email" name="email" {...register("email", {
                   pattern: {
                     value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
                     message: "Provide valid Email",
@@ -703,7 +717,7 @@ const AdmissionForm = () => {
               </div>
 
               <div className="input-field my-8">
-                <input type="tel" id="number" {...register("phone")} />
+                <input type="tel" id="number" name="phone" {...register("phone")} />
                 <label htmlFor="number" className="labelstyle">Mobile Number</label>
               </div>
             </div>
